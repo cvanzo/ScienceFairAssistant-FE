@@ -30,21 +30,31 @@ import { UploadResponse } from '../../interfaces/api.interfaces';
   providers: [ApiService]
 })
 export class UploadComponent {
-  selectedFile: File | null = null;
+  selectedFiles: FileList | null = null;
   question: string = '';
 
   constructor(private apiService: ApiService) { }
 
-  onFileSelected(event: any): void {
-    this.selectedFile = event.target.files[0];
-  }
+ // Event handler for file selection
+ onFileSelected(event: any): void {
+  this.selectedFiles = event.target.files;
+  console.log('Selected files:', this.selectedFiles);
+}
 
-  onUpload(): void {
-    if (this.selectedFile) {
-      this.apiService.uploadFile(this.selectedFile).subscribe((response: UploadResponse) => {
-        console.log(response);
-      });
-    }
+// Function to upload selected files
+onUpload(): void {
+  if (this.selectedFiles) {
+    this.apiService.uploadFiles(this.selectedFiles).subscribe(
+      response => {
+        console.log('Upload successful:', response);
+      },
+      error => {
+        console.error('Upload failed:', error);
+      }
+    );
+  } else {
+    console.log('No files selected.');
   }
+}
 
 }

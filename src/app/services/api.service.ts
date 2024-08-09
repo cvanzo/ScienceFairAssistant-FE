@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { AskResponse, UploadResponse } from '../interfaces/api.interfaces';
+
 
 @Injectable({
   providedIn: 'root'
@@ -10,15 +12,25 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  uploadFile(file: File): Observable<any> {
+  // Function to upload multiple files
+  uploadFiles(files: FileList): Observable<UploadResponse> {
     const formData: FormData = new FormData();
-    formData.append('file', file, file.name);
+    console.log('Files to upload:', files);
 
-    return this.http.post(`${this.apiUrl}/upload`, formData);
+    // Append each file to the FormData object
+    Array.from(files).forEach((file: File) => {
+      console.log('File to upload next:', file);
+      formData.append('files', file, file.name);
+    });
+
+    console.log('Uploading formdata:', formData);
+
+    return this.http.post<UploadResponse>(`${this.apiUrl}/upload`, formData);
   }
 
-  askQuestion(question: string): Observable<any> {
+  // Function to ask a question
+  askQuestion(question: string): Observable<AskResponse> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post(`${this.apiUrl}/ask`, { question }, { headers });
+    return this.http.post<AskResponse>(`${this.apiUrl}/ask`, { question }, { headers });
   }
 }

@@ -4,7 +4,7 @@
     <mat-card-subtitle> (pdf or txt file)</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <input type="file"  accept=".txt,.pdf" (change)="onFileSelected($event)" />
+    <input type="file"  accept=".txt,.pdf" (change)="onFileSelected($event)" multiple />
     <button mat-raised-button color="primary" (click)="onUpload()">Upload</button>
   </mat-card-content>
 </mat-card>
